@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Stock Analysis for {{outputDict["ticker"]}} {% endblock %}</h1>
+
+
+     <table>
+            <tr>
+                <td colspan="3" align="center">
+                    <img text-align="center"  src="https://finviz.com/chart.ashx?t={{ outputDict['ticker'] }}&ty=c&ta=1&p=d&s=l" />
+                </td>
+            </tr>
+         <tr>
+            <th>Indicators</th>
+             <th>Values</th>
+             <th>Stock Condition</th>
+             <th>Explanation</th>
+        </tr>
+
+        <tr>
+            <td>Bollinger Bands Low/High</td>
+            <td>
+                    {{ outputDict['BBAND']['BBAND_lower'] }} / {{ outputDict['BBAND']['BBAND_higher'] }}
+            </td>
+            <td class="{{outputDict['BBAND']['BBAND_condition']}}">
+                    {{ outputDict['BBAND']['BBAND_condition'] }}
+            </td>
+            {%if outputDict['BBAND']['BBAND_condition'] == "Neutral"%}
+            <td>The current price is not lower than the lower band and the current price is not higher than the upper band</td>
+            {%elif outputDict['BBAND']['BBAND_condition'] == "Overbought"%}
+            <td>The current price is higher than the upper band, avoid buying.</td>
+            {%elif outputDict['BBAND']['BBAND_condition'] == "Oversold"%}
+            <td>The current price is lower than the lower band, buy</td>
+            {% endif %}
+
+            <td></td>
+        </tr>
+        <tr>
+            <td>Simple Moving Average Shorter/Longer</td>
+            <td>
+                    {{ outputDict['SMA']['SMA_Shorter'] }} / {{ outputDict['SMA']['SMA_Longer'] }}
+            </td>
+            <td class="{{ outputDict['SMA']['SMA_condition'] }}">
+                    {{ outputDict['SMA']['SMA_condition'] }}
+            </td>
+             {%if outputDict['SMA']['SMA_condition'] == "Sell"%}
+            <td>The SMA of the the shorter time frame is less than the SMA of the longer time frame, sell the stock. </td>
+            {%elif outputDict['SMA']['SMA_condition'] == "Buy"%}
+            <td>The SMA of the the shorter time frame is greater than the SMA of the longer time frame, buy the stock.</td>
+            {% endif %}
+
+        </tr>
+         <tr>
+            <td>Relative Strength Index</td>
+            <td>
+                    {{ outputDict['RSI']['RSI'] }}
+            </td>
+            <td class="{{outputDict['RSI']['RSI_condition']}}">
+                    {{ outputDict['RSI']['RSI_condition'] }}
+            </td>
+             {%if outputDict['RSI']['RSI_condition'] == "Neutral"%}
+            <td>The RSI is less than 70 but above 30 so it is neutral</td>
+            {%elif outputDict['RSI']['RSI_condition'] == "Overbought"%}
+            <td>The RSI is above 70 so it is overbought, avoid buying.</td>
+            {%elif outputDict['RSI']['RSI_condition'] == "Oversold"%}
+            <td>The RSI is below 30 so it is oversold, buy the stock.</td>
+            {% endif %}
+
+        </tr>
+
+
+
+
+
+
+
+    </table>
+    <h3>{{ticker}}</h3>
+    <p></p>
+
+</div>
+
+{% endblock %}

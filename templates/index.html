@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Analyze a Stock Symbol {% endblock %}</h1>
+    <form method="post">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+         {% for category, message in messages %}
+            <div class="alert {{category}}">
+
+            {{ message }}
+
+            </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <label for="ticker" style="font-size:30px">Ticker</label>
+
+
+        {% if error %}
+        <p class="error"><strong>Error:</strong>{{ error }}</p>
+        {% endif %}
+        <br>
+        <input size="20" type="text" name="ticker" placeholder="Stock Ticker" value="{{request.form['ticker']}}">
+        <br>
+
+
+        <button style="margin:20px" type="submit">Submit</button>
+
+    </form>
+{% endblock %}
